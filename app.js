@@ -7,6 +7,8 @@ const { body, validationResult } = require("express-validator");
 const app = express();
 const PORT = PORT_NUM;
 
+const cors = require("cors");
+
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -30,6 +32,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+//ADD CORS CODE:
+const corsOrigin = "http://localhost:3000";
+app.use(
+  cors({
+    origin: [corsOrigin],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
 // Serve static images from different folders
 app.use(
   "/images/id",
@@ -41,7 +53,7 @@ app.use(
 );
 
 // Endpoints to upload images
-app.post("/upload/:type", upload.single("image"), validateUpload, (req, res) => {
+app.post("/upload/:type", upload.single("image"), (req, res) => {
   res.send({
     message: "Image uploaded successfully!",
     type: req.params.type, // This will be either 'id' or 'general'
@@ -50,19 +62,19 @@ app.post("/upload/:type", upload.single("image"), validateUpload, (req, res) => 
 });
 
 // Validate upload middleware using express validator
-const validateUpload = [
-    // Validate 'type' parameter
-    body("type").isIn(["id", "general"]).withMessage("Invalid image type"),
-  
-    // Validate 'image' file upload
-    body("image").custom((value, { req }) => {
-      if (!req.file) {
-        throw new Error("Image file is required");
-      }
-      // Additional file validation logic can be added here, e.g., file size, file type, etc.
-      return true;
-    }),
-  ];
+// const validateUpload = [
+//     // Validate 'type' parameter
+//     body("type").isIn(["id", "general"]).withMessage("Invalid image type"),
+
+//     // Validate 'image' file upload
+//     body("image").custom((value, { req }) => {
+//       if (!req.file) {
+//         throw new Error("Image file is required");
+//       }
+//       // Additional file validation logic can be added here, e.g., file size, file type, etc.
+//       return true;
+//     }),
+//   ];
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
