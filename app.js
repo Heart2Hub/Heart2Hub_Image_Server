@@ -54,11 +54,15 @@ app.use(
 
 // Endpoints to upload images
 app.post("/upload/:type", upload.single("image"), (req, res) => {
-  res.send({
-    message: "Image uploaded successfully!",
-    type: req.params.type, // This will be either 'id' or 'general'
-    filename: req.file.filename,
-  });
+  if (req.body) {
+    res.send({
+      message: "Image uploaded successfully!",
+      type: req.params.type, // This will be either 'id' or 'general'
+      filename: req.file.filename,
+    });
+  } else {
+    res.status(400).send("Please upload a profile picture");
+  }
 });
 
 // Validate upload middleware using express validator
