@@ -1,4 +1,9 @@
 const { PORT_NUM } = require("./constants/PortNum");
+const {
+  WEB_PORTAL,
+  MOBILE_APP,
+  ELGIN_ANDROID,
+} = require("./constants/EndPoint");
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
@@ -33,10 +38,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 //ADD CORS CODE:
-const corsOrigin = "http://localhost:3000";
+const corsOrigins = [WEB_PORTAL, MOBILE_APP, ELGIN_ANDROID];
 app.use(
   cors({
-    origin: [corsOrigin],
+    origin: corsOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   })
