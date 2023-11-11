@@ -7,7 +7,6 @@ const {
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const { body, validationResult } = require("express-validator");
 var { expressjwt: jwt } = require("express-jwt");
 const { JWT_SECRET } = require("./constants/JwtSecret");
 
